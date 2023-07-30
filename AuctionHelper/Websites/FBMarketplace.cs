@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using DSharpPlus.Entities;
 
 namespace AuctionHelper.Websites
 {
@@ -18,6 +19,7 @@ namespace AuctionHelper.Websites
             public string Title { get; init; }
             public string Description { get; init; }
             public decimal Price { get; init; }
+            public Uri ImageUri { get; init; }
         }
 
         private static Regex regex = new Regex(@"(?<!!)https?:\/\/www\.facebook\.com\/marketplace\/item\/\d+\/?.*");
@@ -31,21 +33,31 @@ namespace AuctionHelper.Websites
         {
             HtmlDocument doc = web.Load(url);
             FBItem item = GetItem(doc);
-            
+
+            await e.Message.RespondAsync(new DiscordMessageBuilder()
+                .WithEmbed(new DiscordEmbedBuilder()
+                    .AddField("Price", item.Price.ToString())
+                    .WithTitle(item.Title)
+                    .WithFooter(item.Description)
+                    .WithColor(DiscordColor.MidnightBlue)
+                    .WithImageUrl(item.ImageUri)));
         }
 
         private static FBItem GetItem(HtmlDocument doc)
         {
             string name = doc.DocumentNode.SelectNodes("//meta[@name='DC.title']").Single().Attributes[1].Value;
             string description = doc.DocumentNode.SelectNodes("//meta[@name='DC.description']").Single().Attributes[1].Value;
-            var priceNode = JsonNode.Parse(doc.DocumentNode.SelectNodes("//meta[@name='DC.description']").Single().Attributes[1].Value)?.AsObject();
+            string priceJson = doc.DocumentNode.SelectNodes("//script[@type='application/ld+json']")[1].InnerHtml;
+            var priceNode = JsonNode.Parse(priceJson)?.AsObject();
             decimal price = decimal.Parse(priceNode?["offers"]?["price"]?.ToString() ?? "-1");
+            string imageString = priceNode?["image"]?.ToString() ?? "";
 
             return new FBItem
             {
                 Title = name,
                 Description = description,
                 Price = price,
+                ImageUri = new Uri(imageString),
             };
         }
     }

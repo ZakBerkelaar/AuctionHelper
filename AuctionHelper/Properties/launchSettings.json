@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "AuctionHelper": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "TOKEN": "MTA3MDIxMDUzODc0OTA1NTAzNg.GCWbLv.9BKGzd-yp6UsflGm_DMWxa_V9aeW-c4_EeDTUc"
+      }
+    }
+  }
+}

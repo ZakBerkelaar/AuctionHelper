@@ -29,8 +29,9 @@ namespace AuctionHelper
 
             var discord = new DiscordClient(new DiscordConfiguration()
             {
-                Token = "MTA3MDIxMDUzODc0OTA1NTAzNg.GCWbLv.9BKGzd-yp6UsflGm_DMWxa_V9aeW-c4_EeDTUc", // DEV
+                //Token = "MTA3MDIxMDUzODc0OTA1NTAzNg.GCWbLv.9BKGzd-yp6UsflGm_DMWxa_V9aeW-c4_EeDTUc", // DEV
                 //Token = "OTg2MDgzMTU2OTM3NTY0MjMw.Gye9rZ.3Dv2xDJes2RHGmZXbMy6GJhIi3GqZEJCE6Fn7c", // REAL
+                Token = Environment.GetEnvironmentVariable("TOKEN") ?? "INVALID_TOKEN",
                 TokenType = TokenType.Bot,
                 Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents
             });
