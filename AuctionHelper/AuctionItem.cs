@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace AuctionHelper
 {
-    public record class AuctionItem
+    [Serializable]
+    public record AuctionItem
     {
         public string Name { get; init; }
         public string LotNumber { get; init; }
