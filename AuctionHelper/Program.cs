@@ -17,6 +17,7 @@ namespace AuctionHelper
             websites.Add(new RideauActions());
             //websites.Add(new AliExpress());
             websites.Add(new FBMarketplace());
+            websites.Add(new Kijiji());
 
             MainAsync().GetAwaiter().GetResult();
         }
