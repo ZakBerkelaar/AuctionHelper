@@ -46,12 +46,10 @@ namespace AuctionHelper.Websites
         private static KjItem GetItem(HtmlDocument doc)
         {
             string name = doc.DocumentNode.SelectNodes("//h1[@class='title-2323565163']").Single().InnerText;
-            string description = doc.DocumentNode.SelectNodes("//meta[@name='DC.description']").Single().Attributes[1].Value;
-            
-            string priceJson = doc.DocumentNode.SelectNodes("//script[@type='application/Id+json']")[1].InnerHtml;
-            var priceNode = JsonNode.Parse(priceJson)?.AsObject();
-            decimal price = decimal.Parse(priceNode?["offers"]?["price"]?.ToString() ?? "-1");
-            string imageString = priceNode?["image"]?.ToString() ?? "";
+            string description = doc.DocumentNode.SelectNodes("//meta[@property='og:description']").Single().Attributes[1].Value;
+            string imageString = doc.DocumentNode.SelectNodes("//meta[@property='og:image']").Single().Attributes[1].Value ?? "";
+            string priceString = doc.DocumentNode.SelectNodes("//div[@class='priceContainer-1419890179']")[0].InnerText.TrimStart('$');
+            decimal price = decimal.Parse(priceString ?? "-1");
 
             return new KjItem
             {
