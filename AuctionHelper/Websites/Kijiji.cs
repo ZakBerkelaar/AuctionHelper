@@ -36,7 +36,7 @@ namespace AuctionHelper.Websites
 
             await e.Message.RespondAsync(new DiscordMessageBuilder()
                 .WithEmbed(new DiscordEmbedBuilder()
-                    .AddField("Price", item.Price.ToString())
+                    .AddField("Price", item.Price.ToString("C"))
                     .WithTitle(item.Title)
                     .WithFooter(item.Description)
                     .WithColor(DiscordColor.Purple)
@@ -45,11 +45,11 @@ namespace AuctionHelper.Websites
 
         private static KjItem GetItem(HtmlDocument doc)
         {
-            string name = doc.DocumentNode.SelectNodes("//h1[@class='title-2323565163']").Single().InnerText;
-            string description = doc.DocumentNode.SelectNodes("//meta[@property='og:description']").Single().Attributes[1].Value;
-            string imageString = doc.DocumentNode.SelectNodes("//meta[@property='og:image']").Single().Attributes[1].Value ?? "";
-            string priceString = doc.DocumentNode.SelectNodes("//div[@class='priceContainer-1419890179']")[0].InnerText.TrimStart('$');
-            decimal price = decimal.Parse(priceString ?? "-1");
+            string name = System.Web.HttpUtility.HtmlDecode(doc.DocumentNode.SelectNodes("//h1[@class='title-2323565163']").Single().InnerText);
+            string description = System.Web.HttpUtility.HtmlDecode(doc.DocumentNode.SelectNodes("//meta[@property='og:description']").Single().Attributes[1].Value);
+            string imageString = doc.DocumentNode.SelectNodes("//meta[@property='og:image']").Single().Attributes[1].Value;
+            string priceString = doc.DocumentNode.SelectNodes("//span[@itemprop='price']").Single().Attributes[1].Value;
+            decimal price = decimal.Parse(priceString);
 
             return new KjItem
             {
