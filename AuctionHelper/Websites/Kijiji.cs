@@ -22,7 +22,7 @@ namespace AuctionHelper.Websites
             public Uri ImageUri { get; init; }
         }
 
-        private static Regex regex = new Regex(@"(?<!!)https?:\/\/www\.kijiji\.ca\/v-*");
+        private static Regex regex = new Regex(@"(?<!!)https?:\/\/www\.kijiji\.ca\/v-.*");
 
         public override bool CheckURL(string url)
         {
@@ -39,14 +39,15 @@ namespace AuctionHelper.Websites
                     .AddField("Price", item.Price.ToString())
                     .WithTitle(item.Title)
                     .WithFooter(item.Description)
-                    .WithColor(DiscordColor.Indigo)
+                    .WithColor(DiscordColor.Purple)
                     .WithImageUrl(item.ImageUri)));
         }
 
         private static KjItem GetItem(HtmlDocument doc)
         {
-            string name = doc.DocumentNode.SelectNodes("//meta[@name='DC.title']").Single().Attributes[1].Value;
+            string name = doc.DocumentNode.SelectNodes("//h1[@class='title-2323565163']").Single().InnerText;
             string description = doc.DocumentNode.SelectNodes("//meta[@name='DC.description']").Single().Attributes[1].Value;
+            
             string priceJson = doc.DocumentNode.SelectNodes("//script[@type='application/Id+json']")[1].InnerHtml;
             var priceNode = JsonNode.Parse(priceJson)?.AsObject();
             decimal price = decimal.Parse(priceNode?["offers"]?["price"]?.ToString() ?? "-1");
