@@ -22,11 +22,11 @@ jobs:
         dotnet-version: 6.0.x
     - name: Restore dependencies
       run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
+    - name: Publish
+      run: dotnet publish AuctionHelper/AuctionHelper.csproj -c Release -o build
     - name: Upload build
       uses: actions/upload-artifact@v3
       with:
         name: build
-        path: bin
-        
+        path: AuctionHelper/build/**
+        if-no-files-found: error
