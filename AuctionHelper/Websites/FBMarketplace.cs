@@ -45,8 +45,8 @@ namespace AuctionHelper.Websites
 
         private static FBItem GetItem(HtmlDocument doc)
         {
-            string name = doc.DocumentNode.SelectNodes("//meta[@name='DC.title']").Single().Attributes[1].Value;
-            string description = doc.DocumentNode.SelectNodes("//meta[@name='DC.description']").Single().Attributes[1].Value;
+            string name = System.Web.HttpUtility.HtmlDecode(doc.DocumentNode.SelectNodes("//meta[@name='DC.title']").Single().Attributes[1].Value);
+            string description = System.Web.HttpUtility.HtmlDecode(doc.DocumentNode.SelectNodes("//meta[@name='DC.description']").Single().Attributes[1].Value);
             string priceJson = doc.DocumentNode.SelectNodes("//script[@type='application/ld+json']")[1].InnerHtml;
             var priceNode = JsonNode.Parse(priceJson)?.AsObject();
             decimal price = decimal.Parse(priceNode?["offers"]?["price"]?.ToString() ?? "-1");

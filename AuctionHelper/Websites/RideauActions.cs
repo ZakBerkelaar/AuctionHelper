@@ -49,7 +49,7 @@ namespace AuctionHelper.Websites
 
         private static AuctionItem GetAuctionItem(HtmlDocument doc)
         {
-            string name = doc.DocumentNode.SelectNodes("//div[@class='title']").Single().ChildNodes[0].InnerText;
+            string name = System.Web.HttpUtility.HtmlDecode(doc.DocumentNode.SelectNodes("//div[@class='title']").Single().ChildNodes[0].InnerText);
             string lotNumber = doc.DocumentNode.SelectNodes("//div[@class='lotNumber']").Single().ChildNodes[1].InnerText;
             //Uri imageUri = new Uri($@"https://auctioneersoftware.s3.amazonaws.com/rid/2021/2/medium/{urlRegex.Match(doc.DocumentNode.SelectNodes("//div[@class='image-gallery-slides']").Single().FirstChild.FirstChild.FirstChild.Attributes[0].Value).Groups[1].Value}");
             Uri imageUri = new Uri(doc.DocumentNode.SelectNodes("//div[@class='image-gallery-slides']").Single().FirstChild.FirstChild.FirstChild.Attributes[0].Value);
@@ -60,7 +60,7 @@ namespace AuctionHelper.Websites
             int watching = int.Parse(doc.DocumentNode.SelectNodes("//div[@class='watchCount']").Single().ChildNodes[1].InnerText);
             decimal startingBid = decimal.Parse(doc.DocumentNode.SelectNodes("//div[@class='startingBid']").Single().ChildNodes[1].InnerText[1..]);
             decimal bidIncrement = decimal.Parse(doc.DocumentNode.SelectNodes("//div[@class='bidIncrement scale']").Single().ChildNodes[2].InnerText[1..]);
-            string description = doc.DocumentNode.SelectNodes("//div[@class='moreDetails']/div[1]/div[1]/div[1]/div[1]").Single().InnerText;
+            string description = System.Web.HttpUtility.HtmlDecode(doc.DocumentNode.SelectNodes("//div[@class='moreDetails']/div[1]/div[1]/div[1]/div[1]").Single().InnerText);
 
             return new AuctionItem()
             {
