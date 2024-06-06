@@ -59,7 +59,7 @@ namespace AuctionHelper.Websites
             int bidCount = int.Parse(doc.DocumentNode.SelectNodes("//div[@class='bidCount']").Single().ChildNodes[1].InnerText);
             int watching = int.Parse(doc.DocumentNode.SelectNodes("//div[@class='watchCount']").Single().ChildNodes[1].InnerText);
             decimal startingBid = decimal.Parse(doc.DocumentNode.SelectNodes("//div[@class='startingBid']").Single().ChildNodes[1].InnerText[1..]);
-            decimal bidIncrement = decimal.Parse(doc.DocumentNode.SelectNodes("//div[@class='bidIncrement ']").Single().ChildNodes[1].InnerText[1..]);
+            decimal bidIncrement = decimal.Parse(doc.DocumentNode.SelectNodes("//div[@id='bidIncrement']").Single().ChildNodes[^1].InnerText[1..]);
             string description = System.Web.HttpUtility.HtmlDecode(doc.DocumentNode.SelectNodes("//div[@class='moreDetails']/div[1]/div[1]/div[1]/div[1]").Single().InnerText);
 
             return new AuctionItem()
